@@ -239,6 +239,7 @@
         {
           "type": "string"
         }
+      ]
     },
     "kill_signal": {
       "description": "Signal to send to a process to shut it down gracefully. Default is SIGINT.",
