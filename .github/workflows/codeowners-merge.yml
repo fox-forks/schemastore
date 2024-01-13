@@ -11,8 +11,9 @@ jobs:
     steps:
       - uses: 'actions/checkout@v4'
       - name: 'Run Codeowners merge check'
-        uses: 'OSS-Docs-Tools/code-owner-self-merge@1.6.5'
+        uses: 'fox-forks/code-owner-self-merge@master'
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           merge_method: 'squash'
+          # quietFor: '["@hyperupcall"]'
