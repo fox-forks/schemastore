@@ -138,6 +138,8 @@ So, we recommend avoiding regex patterns for:
 
 In addition, be wary when adding exhaustive support to enum-type fields (without a `"type": "string"` fallback). Often, when applications expand support (thus expanding the set of allowable enums), the schema will become invalid.
 
+Also, try to avoid using `"patternProperties"` with values like `^.+$`. Instead, use `additionalProperties`.
+
 #### Undocumented Features
 
 The use of undocumented features in schemas is permitted and encouraged. However they must be labeled as such.

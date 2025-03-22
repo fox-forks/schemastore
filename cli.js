@@ -44,6 +44,7 @@ const SchemaValidation = /** @type {SchemaValidationJson} */ (
 const SchemaDir = './src/schemas/json'
 const TestPositiveDir = './src/test'
 const TestNegativeDir = './src/negative_test'
+const ReportDir = './reports'
 const UrlSchemaStore = 'https://json.schemastore.org/'
 const [SchemasToBeTested, FoldersPositiveTest, FoldersNegativeTest] = (
   await Promise.all([
@@ -85,12 +86,10 @@ if (argv.SchemaName) {
  * @property {string | undefined} $ref
  *
  * @typedef {Object} JsonSchemaDraft04
- * @property {undefined} $id
  * @property {string} id
  *
  * @typedef {Object} JsonSchemaDraft07
  * @property {string} $id
- * @property {undefined} id
  *
  * @typedef {JsonSchemaAny & (JsonSchemaDraft04 | JsonSchemaDraft07)} JsonSchema
  */
@@ -792,7 +791,33 @@ async function taskCheckRemote() {
 }
 
 async function taskReport() {
-  await printSchemaReport()
+  await fs.mkdir(ReportDir, { recursive: true })
+  await forEachFile({
+    async onSchemaFile(/** @type {SchemaFile} */ schema) {
+      const reportFile = path.join(
+        ReportDir,
+        schema.name.replace(/\.json$/, '.md'),
+      )
+
+      const text = `# ${schema.name}
+
+## Metadata
+
+\`\`\`
+$schema = ${schema.json.$schema}
+${'id' in schema.json ? `id = ${schema.json.id}` : `$id = ${schema.json.$id}`}
+${'title' in schema.json ? `title = ${schema.json.title}` : ''}
+\`\`\`
+
+## Strict Mode Errors
+
+Strict mode is currently DISABLED.
+
+## SchemaSafe Errors
+`
+      await fs.writeFile(reportFile, text)
+    },
+  })
 }
 
 async function taskMaintenance() {
@@ -1425,14 +1450,14 @@ async function assertSchemaHasValidIdField(/** @type {SchemaFile} */ schema) {
     'http://json-schema.org/draft-04/schema#',
   ]
   if (schemasWithDollarlessId.includes(schema.json.$schema)) {
-    if (schema.json.id === undefined) {
+    if (!('id' in schema.json)) {
       printErrorAndExit(new Error(), [
         `Missing property 'id' for schema "./${path.join(SchemaDir, schema.name)}"`,
       ])
     }
     schemaId = schema.json.id
   } else {
-    if (schema.json.$id === undefined) {
+    if (!('$id' in schema.json)) {
       printErrorAndExit(new Error(), [
         `Missing property '$id' for schema "./${path.join(SchemaDir, schema.name)}"`,
       ])
@@ -1457,7 +1482,7 @@ async function assertSchemaHasCorrectMetadata(
   ]
 
   if (schemasWithDollarlessId.includes(schema.json.$schema)) {
-    if (schema.json.$id) {
+    if ('$id' in schema.json) {
       printErrorAndExit(new Error(), [
         `Expected to find correct metadata on schema file "./${schema.path}"`,
         `Bad property of '$id'; expected 'id' for this schema version`,
@@ -1473,7 +1498,7 @@ async function assertSchemaHasCorrectMetadata(
       ])
     }
   } else {
-    if (schema.json.id) {
+    if ('id' in schema.json) {
       printErrorAndExit(new Error(), [
         `Expected to find correct metadata on schema file "./${schema.path}"`,
         `Bad property of 'id'; expected '$id' for this schema version`,
