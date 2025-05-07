@@ -3,7 +3,7 @@ name: 'Deploy to GitHub pages'
 on:
   schedule:
     # Every day at 20:30 UTC
-    - cron:  '30 20 * * *'
+    - cron: '30 20 * * *'
   push:
     branches: ['master']
   # Allows you to run this workflow manually from the Actions tab
