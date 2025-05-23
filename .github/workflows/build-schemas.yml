@@ -32,3 +32,5 @@ jobs:
           git config --global user.name 'My Name'
           git add file
           git commit -m "Update file"
+          git push -u me
+          git push
