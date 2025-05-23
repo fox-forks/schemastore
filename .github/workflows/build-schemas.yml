@@ -25,13 +25,13 @@ jobs:
   build:
     runs-on: 'ubuntu-latest'
     permissions:
-      contents: 'read'
+      contents: 'write'
     steps:
       - uses: 'actions/checkout@v4'
       - run: |
           echo "$RANDOM" > file
           git config --global user.email 'me@example.com'
-          git config --global user.name 'My Name'
+          git config --global user.name '${{ github.actor }}'
           git add file
           git commit -m "Update file"
           git push -u origin
