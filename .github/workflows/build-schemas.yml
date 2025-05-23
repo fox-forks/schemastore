@@ -33,6 +33,6 @@ jobs:
           git config --global user.email '41898282+github-actions[bot]@users.noreply.github.com'
           git config --global user.name 'github-actions[bot]'
           git add file
-          git commit -m "Update file"
+          git commit -m "Update files"
           # git push -u origin
       - uses: peter-evans/create-pull-request@v7
