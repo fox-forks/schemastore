@@ -28,5 +28,7 @@ jobs:
       - uses: 'actions/checkout@v4'
       - run: |
           echo "$RANDOM" > file
+          git config --global user.email 'me@example.com'
+          git config --global user.name 'My Name'
           git add file
           git commit -m "Update file"
