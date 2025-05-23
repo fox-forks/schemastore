@@ -898,26 +898,18 @@ async function taskBuildWebsite() {
   await fs.mkdir('./website', { recursive: true })
   await Promise.all(
     SchemasToBeTested.map((schemaName) => {
-      return fs
-        .copyFile(
-          path.join(SchemaDir, schemaName),
-          path.join('./website', schemaName),
-        )
-        .catch((err) => {
-          if (err.code !== 'EISDIR') throw err
-        })
+      return fs.copyFile(
+        path.join(SchemaDir, schemaName),
+        path.join('./website', schemaName),
+      )
     }),
   )
   await Promise.all(
     SchemasToBeTested.map((schemaName) => {
-      return fs
-        .copyFile(
-          path.join(SchemaDir, schemaName),
-          path.join('./website', path.parse(schemaName).name),
-        )
-        .catch((err) => {
-          if (err.code !== 'EISDIR') throw err
-        })
+      return fs.copyFile(
+        path.join(SchemaDir, schemaName),
+        path.join('./website', path.parse(schemaName).name),
+      )
     }),
   )
 }
