@@ -34,5 +34,5 @@ jobs:
           git config --global user.name '${{ github.actor }}'
           git add file
           git commit -m "Update file"
-          git push -u origin
-          git push
+          # git push -u origin
+      - uses: peter-evans/create-pull-request@v7
