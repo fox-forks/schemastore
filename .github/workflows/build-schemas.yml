@@ -3,7 +3,6 @@ name: 'Make Commit'
 on:
   schedule:
     # Every minute.
-    - cron: '*/10 * * * *'
   push:
     branches: ['master']
   # Allows you to run this workflow manually from the Actions tab
